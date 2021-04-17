@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset='utf-8' />
+<title>pp</title>
+<meta name='viewport' content='initial-scale=1,maximum-scale=1,user-scalable=no' />
+<script src='https://api.tiles.mapbox.com/mapbox-gl-js/v1.13.1/mapbox-gl.js'></script>
+<link href='https://api.tiles.mapbox.com/mapbox-gl-js/v1.13.1/mapbox-gl.css' rel='stylesheet' />
+<style>
+body { margin:0; padding:0; }
+#map {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 100%;
+}
+
+#menutop{
+  position: absolute;
+  width: 100%;
+}
+
+</style>
+</head>
+<body>
+
+
+<div id='menu'>
+ <span id='centerSpan'></span>
+ <p>ああああああああああああああああああああああああああああああああああああああああああ</p>
+ <p>ああああああああああああああああああああああああああああああああああああああああああ</p>
+ <p>ああああああああああああああああああああああああああああああああああああああああああ</p>
+ <p>ああああああああああああああああああああああああああああああああああああああああああ</p>
+ <p>ああああああああああああああああああああああああああああああああああああああああああ</p>
+ <p>ああああああああああああああああああああああああああああああああああああああああああ</p>
+ <p>ああああああああああああああああああああああああああああああああああああああああああ</p>
+ <p>ああああああああああああああああああああああああああああああああああああああああああ</p>
+ <p>ああああああああああああああああああああああああああああああああああああああああああ</p>
+ <p>ああああああああああああああああああああああああああああああああああああああああああ</p>
+ <p>ああああああああああああああああああああああああああああああああああああああああああ</p>
+ <p>ああああああああああああああああああああああああああああああああああああああああああ</p>
+</div>
+
+<script>
+
+
+/*************************************************/
+/*Mapbox 画像表示用 関係設定                     */
+/*************************************************/
+
+
+let specificationID = "";
+if(window.location.search){
+  const query = window.location.search;
+  const qs = query.split('&');
+  qs.forEach( q => {
+    if(q.match("specificationId=")){
+      specificationID = q.split('=')[1];
+    }
+  });
+}
+
+document.getElementById("centerSpan").innerText = "specificationIDは " + specificationID + " です。";
+
+</script>
+
+
+</body>
+</html>

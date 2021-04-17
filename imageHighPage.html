@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset='utf-8' />
+<title>pp</title>
+<meta name='viewport' content='initial-scale=1,maximum-scale=1,user-scalable=no' />
+<script src='https://api.tiles.mapbox.com/mapbox-gl-js/v1.13.1/mapbox-gl.js'></script>
+<link href='https://api.tiles.mapbox.com/mapbox-gl-js/v1.13.1/mapbox-gl.css' rel='stylesheet' />
+<style>
+body { margin:0; padding:0; }
+#map {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 100%;
+}
+
+#menutop{
+  position: absolute;
+  width: 100%;
+}
+
+</style>
+</head>
+<body>
+
+
+<div id='map'></div>
+<div id='menutop'>
+<div id='menu'>
+</div>
+
+<script>
+
+
+/*************************************************/
+/*Mapbox 画像表示用 関係設定                     */
+/*************************************************/
+
+let specificationID = "";
+if(window.location.search){
+  const query = window.location.search;
+  const qs = query.split('&');
+  qs.forEach( q => {
+    if(q.match("specificationId=")){
+      specificationID = q.split('=')[1];
+    }
+  });
+}
+
+const imageMapStyle = {
+	"version": 8,
+	"name": "imageMapStyle",
+	"sources": {
+		"image": {
+			"type": "image",
+			"url": "./image/100.png?spedificationId=" + specificationID,
+			"coordinates": [
+				[-10, 10],
+				[10, 10],
+				[10, -10],
+				[-10, -10]
+			]
+		}
+	},
+	"layers": [
+		{
+			"id": "background",
+			"type": "background",
+			"paint": {
+				"background-color": "hsla(225,0%,93%,1)",
+				"background-opacity": 1
+			},
+			"layout": {
+				"visibility": "visible"
+			}
+		},
+		{
+			"id": "image",
+			"type": "raster",
+			"source": "image"
+		}
+	]
+}
+
+var map = new mapboxgl.Map({
+  container: 'map', // container id
+  style: imageMapStyle, // stylesheet location
+  center: [0,0], // starting position [lng, lat]
+  zoom: 3, // starting zoom
+  minZoom: 0,
+  maxZoom: 15,
+  localIdeographFontFamily: ['MS Gothic', 'Hiragino Kaku Gothic Pro', 'sans-serif']
+});
+
+
+
+map.addControl(new mapboxgl.NavigationControl(), 'top-right');
+
+map.showTileBoundaries = false;
+
+
+</script>
+
+
+</body>
+</html>

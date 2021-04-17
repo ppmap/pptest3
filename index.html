@@ -1,0 +1,414 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset='utf-8' />
+<title>pp</title>
+<meta name='viewport' content='initial-scale=1,maximum-scale=1,user-scalable=no' />
+<script src='https://api.tiles.mapbox.com/mapbox-gl-js/v1.13.1/mapbox-gl.js'></script>
+<link href='https://api.tiles.mapbox.com/mapbox-gl-js/v1.13.1/mapbox-gl.css' rel='stylesheet' />
+<style>
+body { margin:0; padding:0; }
+#map {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 100%;
+}
+
+#menutop{
+  position: absolute;
+  width: 100%;
+}
+
+#menu {
+    position: relative;
+    padding: 0.5% 2.5% ;
+    margin: 0 0;
+    background: #eeeeee;
+    box-shadow: 0px 0px 0px 0px #eeeeee;
+    font-family: 'Open Sans', sans-serif;
+    width: 95%;
+    height: auto;
+    //max-width: 350px;
+}
+button.local {
+  display: block;
+  text-align:center;
+  background: #dddddd;
+  padding 0 0.5em 0 0.5em;
+  border: solid 2px #ddd;
+  border-radius: 3px;
+  margin: 2.5px 0px 2.5px 0px;
+  line-height: 1.5em;
+  font-size: 1em;
+  width: 100%;
+}
+
+
+#lower {
+  width: 80%;
+}
+
+#upper {
+  width: 80%;
+}
+
+#note {
+  position: relative;
+  color: #FF0000;
+  font-family: 'Open Sans', sans-serif;
+  font-weight: bold;
+  right: 0.5em;
+  text-align: right;
+  text-shadow: #FFFFFF 0.2em 0.2em 0.2em, #FFFFFF -0.2em 0.2em 0.2em, #FFFFFF 0.2em -0.2em 0.2em, #FFFFFF -0.2em -0.2em 0.2em;
+}
+
+
+
+#imageMapPage {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: #EEEEEE;
+  z-index: 1000000;
+}
+
+#imageMapPageHeader{
+  width: 100%;
+  height: 10%;
+}
+
+#imageMapPageHeader table {
+  width: 100%;
+}
+
+#centerTitleSpan{
+  position: fixed;
+  margin: 2.5px 0px 2.5px 0px;
+  padding: 0 0.5em 0 0.5em;
+  top: 10px;
+  left: 90px; 
+  right: 90px;
+  text-align: center;
+}
+
+
+#go2leftButton {
+  position: fixed;
+  width: 100px;
+  top: 10px;
+  left: 5px; 
+  text-align: left;
+}
+#go2rightButton {
+  position: fixed;
+  width: 100px;
+  top: 10px;
+  right: 5px; 
+  text-align: right;
+}
+
+
+#imageMapPageIframe {
+  position: fixed;
+  border: none;
+  right: 0px;
+  left: 0px;
+  top: 70px;
+  bottom: 35px;
+  width: 100%;
+  height: 90%;
+}
+
+
+#back2mapButton {
+  position: fixed;
+  left: 0px;
+  right: 0px;
+  height: 30px;
+  bottom: 0px;
+  
+}
+
+
+</style>
+</head>
+<body>
+
+
+<div id='map'></div>
+<div id='menutop'>
+<div id='menu'>
+  <form name="selection">
+    <input type="checkbox" id="selectPp" name="selectPp" checked="checked" onChange="refleshPp();">空中写真
+    <input type="checkbox" id="selectPp2" name="selectPp2" onChange="refleshPp2();">テスト
+    <input type="checkbox" id="selectPp3" name="selectPp3" onChange="refleshPp3();">テスト２
+    <!--
+    <input type="checkbox" id="selectChizu" name="selectChizu" onChange="refleshZu();">地形図・地勢図
+    -->
+  </form>
+  
+  <div id='aco' name='aco'style="display:;">
+  <form name="question" id="question">
+  <hr>
+    <datalist id="tickmarks">
+      <option value="1900" label="1900"></option>
+      <option value="1910"></option>
+      <option value="1920"></option>
+      <option value="1930"></option>
+      <option value="1940"></option>
+      <option value="1950" label="1950"></option>
+      <option value="1960"></option>
+      <option value="1970"></option>
+      <option value="1980"></option>
+      <option value="1990"></option>
+      <option value="2000" label="2000"></option>
+      <option value="2010"></option>
+      <option value="2020"></option>
+    </datalist>
+    
+    
+    <!--
+    <span>撮影計画機関：</span>
+    -->
+    <input type="hidden" id="kikan" name="kikan" value="" onChange="refleshAll();">
+    
+    
+    <span>縮尺：</span>
+    <select name="pscalestart" onChange="refleshAll();">
+      <option value="0">--</option>
+      <option value="5000">1/5000</option>
+      <option value="10000">1/10000</option>
+      <option value="20000">1/20000</option>
+      <option value="25000">1/25000</option>
+      <option value="50000">1/50000</option>
+      <option value="100000">1/100000</option>
+      <option value="200000">1/200000</option>
+      <option value="500000">1/500000</option>
+      <option value="1000000">1/1000000</option>
+      <option value="5000000">1/5000000</option>
+    </select>
+    <span>～</span>
+    <select name="pscaleend" onChange="refleshAll();">
+      <option value="5000">1/5000</option>
+      <option value="10000">1/10000</option>
+      <option value="20000">1/20000</option>
+      <option value="25000">1/25000</option>
+      <option value="50000">1/50000</option>
+      <option value="100000">1/100000</option>
+      <option value="200000">1/200000</option>
+      <option value="500000">1/500000</option>
+      <option value="1000000">1/1000000</option>
+      <option value="5000000">1/5000000</option>
+      <option value="99999999" selected="selected">--</option>
+    </select>
+    
+    <br>
+    
+    <span>色：</span>
+    <select name="pcolor" onChange="refleshAll();">
+      <option value="cm">カラーとモノクロ</option>
+      <option value="c">カラーだけ</option>
+      <option value="m">モノクロだけ</option>
+    </select>
+    
+    <!--
+    <input type="number" id="pscale" name="pscale" value="0" onChange="refleshPp();">
+    <select name="pscalecond">
+      <option value="higher">以上</option>
+      <option value="equal">に等しい</option>
+      <option value="lower">以下</option>
+    </select>
+    -->
+    
+    <br>
+    
+    
+    <input type="range" id="lower" name="lower" min="1920" max="2021" list="tickmarks" value="2021" onChange="refleshAll();"><span id="lwYearNum"></span><br>
+    <input type="range" id="upper" name="upper" min="1920" max="2021" list="tickmarks" value="1930" onChange="refleshAll();"><span id="upYearNum"></span><br>
+    
+  </form>
+  
+  <!--
+  <form name="zuFilter" id="zuFilter" style="display:none;">
+  <hr>
+  <div>■地形図・地勢図の絞り込み設定</div>
+    <input type="checkbox" id="zu200000" name="zu200000" checked="checked" onChange="refleshZu();">20万分の1
+    <input type="checkbox" id="zu50000" name="zu50000" checked="checked" onChange="refleshZu();">5万分の1
+    <input type="checkbox" id="zu25000" name="zu25000" checked="checked" onChange="refleshZu();">2万5千分の1
+    <input type="checkbox" id="zu10000" name="zu10000" checked="checked" onChange="refleshZu();">1万分の1
+  </form>
+  -->
+
+  </div>
+  <button type="button" class="local" onclick="showFilterSetting()" ><span id="showFilterSettingMode">▲詳細設定を閉じる</span></button>
+</div>
+
+<div id="note">
+  <span>テストVer</span>
+</div>
+
+</div>
+
+
+<!-------------------------------------------------------------------------->
+
+<div id='imageMapPage' name='imageMapPage' style="display:none;">
+  <div id='imageMapPageHeader'>
+    <button type="button" class="local" id="go2leftButton" onclick="goToLeft()" ><span id="gotoLeftButtonSpan">≪情報</span></button>
+    <span id="centerTitleSpan">画像表示ページ</span>
+    <button type="button" class="local" id="go2rightButton" onclick="goToRight()" ><span id="gotoRightButtonSpan">高解像度≫</span></button>
+  </div>
+  <iframe id='imageMapPageIframe' src=""></iframe>
+  <button type="button" class="local" id="back2mapButton" onclick="backToMap()" ><span>戻る</span></button>
+</div>
+<!-------------------------------------------------------------------------->
+
+<script>
+
+const root = "https://ppmap.github.io/pptest2";
+
+/*************************************************/
+/*Mapbox 関係設定                                */
+/*************************************************/
+var map = new mapboxgl.Map({
+  container: 'map', // container id
+  hash: true, //add #position on URL
+  style: './style.json', // stylesheet location
+  center: [139.78148, 35.768793], // starting position [lng, lat]
+  zoom: 9, // starting zoom
+  minZoom: 6,
+  maxZoom: 17.99,
+  localIdeographFontFamily: ['MS Gothic', 'Hiragino Kaku Gothic Pro', 'sans-serif']
+});
+
+
+map.addControl(new mapboxgl.NavigationControl(), 'bottom-right');
+map.addControl(new mapboxgl.ScaleControl() );
+
+map.showTileBoundaries = true;
+
+
+/*************************************************/
+/*UI 関係設定                                    */
+/*************************************************/
+
+let isShowFilterSetting = true;
+
+const showFilterSetting = () => {
+  const element = document.getElementById("aco");
+  console.log(element );
+  
+  if(isShowFilterSetting ){ //閉じる作業
+    element.style.display = "none";
+    document.getElementById("showFilterSettingMode").innerText = "▼詳細設定を開く";
+  }else{ //開く作業
+    element.style.display = "";
+    document.getElementById("showFilterSettingMode").innerText = "▲詳細設定を閉じる";
+  }
+  
+  isShowFilterSetting = !isShowFilterSetting;
+
+}
+
+/*************************************************/
+/*画像表示 関係設定                              */
+/*************************************************/
+
+const backToMap = () => {
+  document.getElementById("imageMapPage").style.display = "none";
+}
+
+const openImageMapPage = (spedicifationID) => {
+  //document.getElementById("imageMapPageIframe").src = "https://mapps.gsi.go.jp/map-lib-api/apiContentsView.do?specificationId=" + spedicifationID;
+  document.getElementById("imageMapPageIframe").src = "./imagePage.html?specificationId=" + spedicifationID;
+  document.getElementById("imageMapPage").style.display = "";
+}
+
+const openHighresoImageMapPage = (spedicifationID) => {
+  //document.getElementById("imageMapPageIframe").src = "https://mapps.gsi.go.jp/map-lib-api/apiContentsView.do?specificationId=" + spedicifationID;
+  document.getElementById("imageMapPageIframe").src = "./imageHighPage.html?specificationId=" + spedicifationID;
+  document.getElementById("imageMapPage").style.display = "";
+}
+
+const openImageMapInfoPage = (spedicifationID) => {
+  //document.getElementById("imageMapPageIframe").src = "https://mapps.gsi.go.jp/map-lib-api/apiContentsView.do?specificationId=" + spedicifationID;
+  document.getElementById("imageMapPageIframe").src = "./imageInfoPage.html?specificationId=" + spedicifationID;
+  document.getElementById("imageMapPage").style.display = "";
+}
+
+const pageStatus = {
+  "left": "info",
+  "right": "highReso",
+  "center": "lowReso",
+  "specificationID": 0,
+  "text": {
+    "info": "情報",
+    "highReso": "高解像度",
+    "lowReso": "低解像度"
+  },
+  "titletext": {
+    "info": "情報",
+    "highReso": "画像表示ページ\n（高解像度）",
+    "lowReso": "画像表示ページ"
+  }
+};
+
+const satusShiftRight = () =>{
+  const buff = pageStatus.left;
+  pageStatus.left = pageStatus.center;
+  pageStatus.center = pageStatus.right;
+  pageStatus.right = buff;
+  document.getElementById("gotoLeftButtonSpan").innerText = "≪" + pageStatus.text[pageStatus.left];
+  document.getElementById("gotoRightButtonSpan").innerText = pageStatus.text[pageStatus.right] + "≫";
+  document.getElementById("centerTitleSpan").innerText = pageStatus.titletext[pageStatus.center];
+}
+
+const satusShiftLeft = () =>{
+  const buff = pageStatus.right;
+  pageStatus.right = pageStatus.center;
+  pageStatus.center = pageStatus.left;
+  pageStatus.left = buff;
+  document.getElementById("gotoLeftButtonSpan").innerText = "≪" + pageStatus.text[pageStatus.left];
+  document.getElementById("gotoRightButtonSpan").innerText = pageStatus.text[pageStatus.right] + "≫";
+  document.getElementById("centerTitleSpan").innerText = pageStatus.titletext[pageStatus.center];
+}
+
+
+const goToLeft = () => {
+  
+  if(pageStatus.left == "info"){
+    openImageMapInfoPage(pageStatus["specificationID"]);
+  }else if(pageStatus.left == "highReso"){
+    openHighresoImageMapPage(pageStatus["specificationID"]);
+  }else{
+    openImageMapPage(pageStatus["specificationID"]);
+  }
+  
+  satusShiftLeft();
+}
+
+const goToRight = () => {
+  
+  if(pageStatus.right == "info"){
+    openImageMapInfoPage(pageStatus["specificationID"]);
+  }else if(pageStatus.right == "highReso"){
+    openHighresoImageMapPage(pageStatus["specificationID"]);
+  }else{
+    openImageMapPage(pageStatus["specificationID"]);
+  }
+  
+  satusShiftRight();
+}
+
+
+</script>
+
+<script src='./pp.js'></script>
+<script src='./popup.js'></script>
+
+
+</body>
+</html>
