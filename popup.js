@@ -202,7 +202,7 @@ map.on('click', function(e) {
         },
         'paint': {
           'circle-radius': 20,
-          'circle-color': ['rgba', 255,255,255,1],
+          'circle-color': ['rgba', 0,200,255,1],
           'circle-blur': 0.4
         }
   }, "overlap");

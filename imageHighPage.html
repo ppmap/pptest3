@@ -18,19 +18,69 @@ body { margin:0; padding:0; }
 #menutop{
   position: absolute;
   width: 100%;
+  height: 100%;
+  z-index: 1000000;
+  display:;
+}
+
+#menu {
+    position: relative;
+    padding: 0.5% 2.5% ;
+    margin: 0 0;
+    background: #eeeeee;
+    box-shadow: 0px 0px 0px 0px #eeeeee;
+    font-family: 'Open Sans', sans-serif;
+    width:100%;
+    height: 100%;
+    //max-width: 350px;
+    text-align: center;
+}
+
+#menu table {
+ padding: 0.5% 2.5% ;
+ width: 100%;
+ height: 100%;
 }
 
 </style>
 </head>
 <body>
 
-
-<div id='map'></div>
 <div id='menutop'>
-<div id='menu'>
+  <div id='menu'>
+    <table>
+      <tr>
+        <td><img src='https://gsi-cyberjapan.github.io/gsimaps/image/system/loading002.gif'></td>
+        <td>ロード中...<br>少々お待ちください。</td>
+      </tr>
+    </table>
+  </div>
 </div>
+<div id='map'></div>
+
+
 
 <script>
+/*
+const loadWaitingHtml = "<table>"
+    
+    + "<tr>"
+    + "  <td><img src='https://gsi-cyberjapan.github.io/gsimaps/image/map/layer_std.png'></td>"
+    + "  <td>標準地図</td>"
+    + "</tr>"
+    + "<tr>"
+    + "  <td colspan='2'>基本となる地図。</td>"
+    + "</tr>"
+    
+    + "<tr>"
+    + "  <td>★</td>"
+    + "  <td>ロード中。少々お待ちください。</td>"
+    + "</tr>"
+    + "<tr></tr>"
+  + "</table>";
+
+document.getElementById("menu").innerHTML = loadWaitingHtml;
+*/
 
 
 /*************************************************/
@@ -98,6 +148,10 @@ var map = new mapboxgl.Map({
 map.addControl(new mapboxgl.NavigationControl(), 'top-right');
 
 map.showTileBoundaries = false;
+
+map.on('load', () => {
+  document.getElementById("menutop").style.display = "none";
+});
 
 
 </script>

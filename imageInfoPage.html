@@ -19,11 +19,13 @@ body { margin:0; padding:0; }
   position: absolute;
   padding: 2.5%;
   width: 95%;
+  background-color: #eeeeee;
 }
 
 #bottomSpace{
   position: absolute;
   height: 50px;
+  color: #eeeeee;
 }
 
 
@@ -70,7 +72,8 @@ if(window.location.search){
   });
 }
 
-document.getElementById("centerSpan").innerText = "specificationIDは " + specificationID + " です。";
+document.getElementById("centerSpan").innerHTML = "specificationIDは " + specificationID + " です。<br>"
+  + "<a target='_mappstop' href='https://mapps.gsi.go.jp/maplibSearch.do?specificationId=" + specificationID + "'>地図・空中写真閲覧サービス</a>" ;
 
 </script>
 

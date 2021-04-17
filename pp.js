@@ -308,6 +308,9 @@ const refleshPp3 = () =>{
 //Map読み込み時
 map.on('load', function(){
   map.addLayer({
+			"metadata": {
+			  "desc": "クリックした地物の強調用レイヤ挿入用"
+			}
 			"id": "overlap",
 			"type": "background",
 			"layout": {
