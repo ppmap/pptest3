@@ -97,14 +97,14 @@ button.local {
 
 #go2leftButton {
   position: fixed;
-  width: 100px;
+  width: 95px;
   top: 10px;
   left: 5px; 
   text-align: left;
 }
 #go2rightButton {
   position: fixed;
-  width: 100px;
+  width: 95px;
   top: 10px;
   right: 5px; 
   text-align: right;
@@ -319,6 +319,7 @@ const showFilterSetting = () => {
 
 const backToMap = () => {
   document.getElementById("imageMapPage").style.display = "none";
+  satusInitialize();
 }
 
 const openImageMapPage = (spedicifationID) => {
@@ -355,6 +356,16 @@ const pageStatus = {
     "lowReso": "画像表示ページ"
   }
 };
+
+const satusInitialize = () =>{
+  pageStatus.left = "info";
+  pageStatus.center = "lowReso";
+  pageStatus.right = "highReso";
+  document.getElementById("gotoLeftButtonSpan").innerText = "≪" + pageStatus.text["info"];
+  document.getElementById("gotoRightButtonSpan").innerText = pageStatus.text["highReso"] + "≫";
+  document.getElementById("centerTitleSpan").innerText = pageStatus.titletext["lowReso"];
+}
+
 
 const satusShiftRight = () =>{
   const buff = pageStatus.left;
