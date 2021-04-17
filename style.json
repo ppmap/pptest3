@@ -1,6 +1,7 @@
 {"version": 8,
 "name": "Vector",
 "metadata": {},
+"glyphs": "https://cyberjapandata.gsi.go.jp/xyz/noto-jp/{fontstack}/{range}.pbf",
 "sources": {
     "raster": {
         "tileSize": 256,
