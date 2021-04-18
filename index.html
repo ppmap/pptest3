@@ -7,7 +7,12 @@
 <script src='https://api.tiles.mapbox.com/mapbox-gl-js/v1.13.1/mapbox-gl.js'></script>
 <link href='https://api.tiles.mapbox.com/mapbox-gl-js/v1.13.1/mapbox-gl.css' rel='stylesheet' />
 <style>
-body { margin:0; padding:0; }
+body { margin:0; padding:0;}
+
+div {
+   max-width:800px;
+}
+
 #map {
   position: absolute;
   top: 0;
@@ -85,7 +90,7 @@ button.local {
 }
 
 #centerTitleSpan{
-  position: fixed;
+  position: absolute;
   left: 0px; 
   right: 0px;
   height: 5%;
@@ -104,14 +109,14 @@ button.local {
   text-align: center;
 }
 #go2leftButton {
-  position: fixed;
+  position: absolute;
   width: 100px;
   top: 10px;
   left: 5px; 
   text-align: left;
 }
 #go2rightButton {
-  position: fixed;
+  position: absolute;
   width: 100px;
   top: 10px;
   right: 5px; 
@@ -120,7 +125,7 @@ button.local {
 
 
 #imageMapPageIframe {
-  position: fixed;
+  position: absolute;
   border: none;
   right: 0px;
   left: 0px;
@@ -371,9 +376,9 @@ const statusInitialize = () =>{
   pageStatus.left = "info";
   pageStatus.center = "lowReso";
   pageStatus.right = "highReso";
-  document.getElementById("gotoLeftButtonSpan").innerText = "≪" + pageStatus.text["info"];
-  document.getElementById("gotoRightButtonSpan").innerText = pageStatus.text["highReso"] + "≫";
-  document.getElementById("centerTitleSpan").innerText = pageStatus.titletext["lowReso"];
+  document.getElementById("gotoLeftButtonSpan").innerText = "≪" + pageStatus.text[pageStatus.left];
+  document.getElementById("gotoRightButtonSpan").innerText = pageStatus.text[pageStatus.right] + "≫";
+  document.getElementById("centerTitleSpan").innerText = pageStatus.titletext[pageStatus.center];
 }
 
 
