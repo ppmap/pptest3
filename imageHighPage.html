@@ -107,10 +107,10 @@ const imageMapStyle = {
 			"type": "image",
 			"url": "./image/100.png?spedificationId=" + specificationID,
 			"coordinates": [
-				[-10, 10],
-				[10, 10],
-				[10, -10],
-				[-10, -10]
+				[-8, 8],
+				[8, 8],
+				[8, -8],
+				[-8, -8]
 			]
 		}
 	},
@@ -138,6 +138,7 @@ var map = new mapboxgl.Map({
   container: 'map', // container id
   style: imageMapStyle, // stylesheet location
   center: [0,0], // starting position [lng, lat]
+//  maxBounds: [-10, -10, 10, 10],
   zoom: 3, // starting zoom
   minZoom: 0,
   maxZoom: 15,
