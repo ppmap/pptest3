@@ -93,9 +93,9 @@ button.local {
   position: absolute;
   left: 0px; 
   right: 0px;
-  height: 5%;
+  height: 10%;
   min-height: 30px;
-  bottom: 0px;
+  top: 5px;
   width: 100%;
   text-align: center;
   background-color: #eeeeee;
@@ -103,7 +103,7 @@ button.local {
 
 #back2mapButton{
   position: absolute;
-  top: 10px;
+  bottom: 10px;
   left: 110px; 
   right: 110px;
   text-align: center;
@@ -111,14 +111,14 @@ button.local {
 #go2leftButton {
   position: absolute;
   width: 100px;
-  top: 10px;
+  bottom: 10px;
   left: 5px; 
   text-align: left;
 }
 #go2rightButton {
   position: absolute;
   width: 100px;
-  top: 10px;
+  bottom: 10px;
   right: 5px; 
   text-align: right;
 }
@@ -129,10 +129,10 @@ button.local {
   border: none;
   right: 0px;
   left: 0px;
-  top: 60px;
+  top: 10%;
   bottom: 35px;
   width: 100%;
-  height: 80%;
+  height: 90%;
 }
 
 
@@ -262,6 +262,8 @@ button.local {
 <!-------------------------------------------------------------------------->
 
 <div id='imageMapPage' name='imageMapPage' style="display:none;">
+  <div id="centerTitleSpan">画像表示</div>
+  <iframe id='imageMapPageIframe' src=""></iframe>
   <div id='imageMapPageHeader'>
     <table><th>
     <td id="go2leftButton" >
@@ -272,9 +274,9 @@ button.local {
       <button type="button" class="local" onclick="goToRight()" ><span id="gotoRightButtonSpan">高解像度≫</span></button>
     </th></table>
   </div>
-  <iframe id='imageMapPageIframe' src=""></iframe>
   
-  <div id="centerTitleSpan">画像表示</div>
+  
+  
 </div>
 <!-------------------------------------------------------------------------->
 
