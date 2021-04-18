@@ -86,15 +86,22 @@ button.local {
 
 #centerTitleSpan{
   position: fixed;
-  margin: 2.5px 0px 2.5px 0px;
-  padding: 0 0.5em 0 0.5em;
-  top: 10px;
-  left: 90px; 
-  right: 90px;
+  left: 0px; 
+  right: 0px;
+  height: 30px;
+  bottom: 0px;
+  width: 100%;
   text-align: center;
+  background-color: #eeeeee;
 }
 
-
+#back2mapButton{
+  position: absolute;
+  top: 10px;
+  left: 110px; 
+  right: 110px;
+  text-align: center;
+}
 #go2leftButton {
   position: fixed;
   width: 100px;
@@ -123,14 +130,7 @@ button.local {
 }
 
 
-#back2mapButton {
-  position: fixed;
-  left: 0px;
-  right: 0px;
-  height: 30px;
-  bottom: 0px;
-  
-}
+
 
 
 </style>
@@ -257,12 +257,18 @@ button.local {
 
 <div id='imageMapPage' name='imageMapPage' style="display:none;">
   <div id='imageMapPageHeader'>
-    <button type="button" class="local" id="go2leftButton" onclick="goToLeft()" ><span id="gotoLeftButtonSpan">≪情報</span></button>
-    <span id="centerTitleSpan">画像表示</span>
-    <button type="button" class="local" id="go2rightButton" onclick="goToRight()" ><span id="gotoRightButtonSpan">高解像度≫</span></button>
+    <table><th>
+    <td id="go2leftButton" >
+      <button type="button" class="local"onclick="goToLeft()" ><span id="gotoLeftButtonSpan">≪情報</span></button>
+    </td><td id="back2mapButton">
+      <button type="button" class="local" onclick="backToMap()" ><span id="backtoMapButtonSpan">戻る</span></button>
+    </td><td id="go2rightButton">
+      <button type="button" class="local" onclick="goToRight()" ><span id="gotoRightButtonSpan">高解像度≫</span></button>
+    </th></table>
   </div>
   <iframe id='imageMapPageIframe' src=""></iframe>
-  <button type="button" class="local" id="back2mapButton" onclick="backToMap()" ><span>戻る</span></button>
+  
+  <span id="centerTitleSpan">画像表示</span>
 </div>
 <!-------------------------------------------------------------------------->
 
@@ -355,7 +361,7 @@ const pageStatus = {
   },
   "titletext": {
     "info": "情報",
-    "highReso": "画像表示\n（高解像度）",
+    "highReso": "画像表示（高解像度）",
     "lowReso": "画像表示"
   }
 };
