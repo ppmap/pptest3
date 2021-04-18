@@ -47,6 +47,10 @@ map.on('click', function(e) {
   var feature = features[0]; //一番上のものだけ表示
   console.log(feature);
   
+  //順番保障されない可能性もあるけど、とりあえず選択地物を中央に揃えておく。
+  //ハッシュを保存して、次に情報を渡せるように。
+  //map.easeTo({center: feature.geometry.coordinates});
+  
   
   //ポップアップ表示処理 ---------------------------------------------
   var htmlString = ""; //ポップアップ
@@ -64,7 +68,11 @@ map.on('click', function(e) {
               const url = 'https://mapps.gsi.go.jp/map-lib-api/apiContentsView.do?specificationId=' + feature.properties[name];
               //window.open(url, "mapps");
               pageStatus["specificationID"] = feature.properties[name];
-              openImageMapPage(feature.properties[name]);
+              pageStatus["hash"] = "#" + map.getZoom() + "/" + feature.geometry.coordinates[1] + "/" + feature.geometry.coordinates[0];
+              openImageMapPage({
+                "specificationID": feature.properties[name], 
+                "hash": pageStatus["hash"]
+              });
               
               
               

@@ -34,18 +34,7 @@ body { margin:0; padding:0; }
 
 <div id='menu'>
   <span id='centerSpan'></span>
-  <p>ああああああああああああああああああああああああああああああああああああああああああ</p>
-  <p>ああああああああああああああああああああああああああああああああああああああああああ</p>
-  <p>ああああああああああああああああああああああああああああああああああああああああああ</p>
-  <p>ああああああああああああああああああああああああああああああああああああああああああ</p>
-  <p>ああああああああああああああああああああああああああああああああああああああああああ</p>
-  <p>ああああああああああああああああああああああああああああああああああああああああああ</p>
-  <p>ああああああああああああああああああああああああああああああああああああああああああ</p>
-  <p>ああああああああああああああああああああああああああああああああああああああああああ</p>
-  <p>ああああああああああああああああああああああああああああああああああああああああああ</p>
-  <p>ああああああああああああああああああああああああああああああああああああああああああ</p>
-  <p>ああああああああああああああああああああああああああああああああああああああああああ</p>
-  <p>ああああああああああああああああああああああああああああああああああああああああああ</p>
+
   <div id='bottomSpace'>
   <p>.</p>
   </div>
@@ -70,8 +59,26 @@ if(window.location.search){
   });
 }
 
+let hash = "#";
+if(window.location.hash){
+  const zll = window.location.hash.substr(1);
+  const zllarr = zll.split("/");
+  console.log(zllarr);
+  const zl = +zllarr[0];
+  const lon = +zllarr[1];
+  const lat = +zllarr[2];
+  let newzl = 15;
+  if(zl > 15) newzl = zl;
+  hash = "#" + newzl + "/" + lon + "/" + lat;
+}
+console.log(hash);
+
 document.getElementById("centerSpan").innerHTML = "specificationIDは " + specificationID + " です。<br>"
-  + "<a target='_mappstop' href='https://mapps.gsi.go.jp/maplibSearch.do?specificationId=" + specificationID + "'>地図・空中写真閲覧サービス</a>" ;
+  + "<ul>"
+  + "<li><a target='_mappstop' href='https://mapps.gsi.go.jp/maplibSearch.do?specificationId=" + specificationID + "'>地図・空中写真閲覧サービス</a></li>"
+  + "<li><a target='_mappstop' href='https://mapps.gsi.go.jp/map-lib-api/apiContentsView.do?specificationId=" + specificationID + "'>地図・空中写真閲覧サービス(コンテンツのみ)</a></li>" 
+  + "<li><a target='_gsimaps' href='https://maps.gsi.go.jp/" + hash + "/&base=std&ls=std%7Cgsi-compare-photo%7Cpp&blend=0&disp=11&lcd=gsi-compare-photo&vs=c1j0h0k0l0u0t0z0r0s0m0f0&d=m'>地理院地図</a></li>" 
+  + "</ul>";
 
 </script>
 

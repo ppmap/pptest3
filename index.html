@@ -97,14 +97,14 @@ button.local {
 
 #go2leftButton {
   position: fixed;
-  width: 95px;
+  width: 100px;
   top: 10px;
   left: 5px; 
   text-align: left;
 }
 #go2rightButton {
   position: fixed;
-  width: 95px;
+  width: 100px;
   top: 10px;
   right: 5px; 
   text-align: right;
@@ -258,7 +258,7 @@ button.local {
 <div id='imageMapPage' name='imageMapPage' style="display:none;">
   <div id='imageMapPageHeader'>
     <button type="button" class="local" id="go2leftButton" onclick="goToLeft()" ><span id="gotoLeftButtonSpan">≪情報</span></button>
-    <span id="centerTitleSpan">画像表示ページ</span>
+    <span id="centerTitleSpan">画像表示</span>
     <button type="button" class="local" id="go2rightButton" onclick="goToRight()" ><span id="gotoRightButtonSpan">高解像度≫</span></button>
   </div>
   <iframe id='imageMapPageIframe' src=""></iframe>
@@ -288,7 +288,7 @@ var map = new mapboxgl.Map({
 map.addControl(new mapboxgl.NavigationControl(), 'bottom-right');
 map.addControl(new mapboxgl.ScaleControl() );
 
-map.showTileBoundaries = true;
+map.showTileBoundaries = false;
 
 
 /*************************************************/
@@ -319,24 +319,27 @@ const showFilterSetting = () => {
 
 const backToMap = () => {
   document.getElementById("imageMapPage").style.display = "none";
-  satusInitialize();
+  statusInitialize();
 }
 
-const openImageMapPage = (spedicifationID) => {
-  //document.getElementById("imageMapPageIframe").src = "https://mapps.gsi.go.jp/map-lib-api/apiContentsView.do?specificationId=" + spedicifationID;
-  document.getElementById("imageMapPageIframe").src = "./imagePage.html?specificationId=" + spedicifationID;
+const openImageMapPage = (paramobj) => {
+  //document.getElementById("imageMapPageIframe").src = "https://mapps.gsi.go.jp/map-lib-api/apiContentsView.do?specificationId=" + paramobj.specificationID;
+  document.getElementById("imageMapPageIframe").src = "./imagePage.html?specificationId=" + paramobj.specificationID;
   document.getElementById("imageMapPage").style.display = "";
 }
 
-const openHighresoImageMapPage = (spedicifationID) => {
-  //document.getElementById("imageMapPageIframe").src = "https://mapps.gsi.go.jp/map-lib-api/apiContentsView.do?specificationId=" + spedicifationID;
-  document.getElementById("imageMapPageIframe").src = "./imageHighPage.html?specificationId=" + spedicifationID;
+const openHighresoImageMapPage = (paramobj) => {
+  //document.getElementById("imageMapPageIframe").src = "https://mapps.gsi.go.jp/map-lib-api/apiContentsView.do?specificationId=" + paramobj.specificationID;
+  document.getElementById("imageMapPageIframe").src = "./imageHighPage.html?specificationId=" + paramobj.specificationID;
   document.getElementById("imageMapPage").style.display = "";
 }
 
-const openImageMapInfoPage = (spedicifationID) => {
-  //document.getElementById("imageMapPageIframe").src = "https://mapps.gsi.go.jp/map-lib-api/apiContentsView.do?specificationId=" + spedicifationID;
-  document.getElementById("imageMapPageIframe").src = "./imageInfoPage.html?specificationId=" + spedicifationID;
+const openImageMapInfoPage = (paramobj) => {
+  //document.getElementById("imageMapPageIframe").src = "https://mapps.gsi.go.jp/map-lib-api/apiContentsView.do?specificationId=" + paramobj.specificationID;
+  //document.getElementById("imageMapPageIframe").src = "./imageInfoPage.html?specificationId=" + specificationID;
+  //document.getElementById("imageMapPageIframe").src = "./imageInfoPage.html" + "?specificationId=" + paramobj.specificationID + window.location.hash;
+  document.getElementById("imageMapPageIframe").src = "./imageInfoPage.html" + "?specificationId=" + paramobj.specificationID + paramobj.hash;
+  console.log(document.getElementById("imageMapPageIframe").src);
   document.getElementById("imageMapPage").style.display = "";
 }
 
@@ -352,12 +355,12 @@ const pageStatus = {
   },
   "titletext": {
     "info": "情報",
-    "highReso": "画像表示ページ\n（高解像度）",
-    "lowReso": "画像表示ページ"
+    "highReso": "画像表示\n（高解像度）",
+    "lowReso": "画像表示"
   }
 };
 
-const satusInitialize = () =>{
+const statusInitialize = () =>{
   pageStatus.left = "info";
   pageStatus.center = "lowReso";
   pageStatus.right = "highReso";
@@ -367,7 +370,7 @@ const satusInitialize = () =>{
 }
 
 
-const satusShiftRight = () =>{
+const statusShiftRight = () =>{
   const buff = pageStatus.left;
   pageStatus.left = pageStatus.center;
   pageStatus.center = pageStatus.right;
@@ -377,7 +380,7 @@ const satusShiftRight = () =>{
   document.getElementById("centerTitleSpan").innerText = pageStatus.titletext[pageStatus.center];
 }
 
-const satusShiftLeft = () =>{
+const statusShiftLeft = () =>{
   const buff = pageStatus.right;
   pageStatus.right = pageStatus.center;
   pageStatus.center = pageStatus.left;
@@ -391,27 +394,27 @@ const satusShiftLeft = () =>{
 const goToLeft = () => {
   
   if(pageStatus.left == "info"){
-    openImageMapInfoPage(pageStatus["specificationID"]);
+    openImageMapInfoPage({"specificationID": pageStatus["specificationID"], "hash": pageStatus["hash"]});
   }else if(pageStatus.left == "highReso"){
-    openHighresoImageMapPage(pageStatus["specificationID"]);
+    openHighresoImageMapPage({"specificationID": pageStatus["specificationID"], "hash": pageStatus["hash"]});
   }else{
-    openImageMapPage(pageStatus["specificationID"]);
+    openImageMapPage({"specificationID": pageStatus["specificationID"], "hash": pageStatus["hash"]});
   }
   
-  satusShiftLeft();
+  statusShiftLeft();
 }
 
 const goToRight = () => {
   
   if(pageStatus.right == "info"){
-    openImageMapInfoPage(pageStatus["specificationID"]);
+    openImageMapInfoPage({"specificationID": pageStatus["specificationID"], "hash": pageStatus["hash"]});
   }else if(pageStatus.right == "highReso"){
-    openHighresoImageMapPage(pageStatus["specificationID"]);
+    openHighresoImageMapPage({"specificationID": pageStatus["specificationID"], "hash": pageStatus["hash"]});
   }else{
-    openImageMapPage(pageStatus["specificationID"]);
+    openImageMapPage({"specificationID": pageStatus["specificationID"], "hash": pageStatus["hash"]});
   }
   
-  satusShiftRight();
+  statusShiftRight();
 }
 
 
