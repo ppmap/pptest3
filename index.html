@@ -16,13 +16,15 @@ div {
 #map {
   position: absolute;
   top: 0;
-  bottom: 0;
+  bottom: 30px;
   width: 100%;
 }
 
 #menutop{
   position: absolute;
   width: 100%;
+  bottom: 0;
+  z-index: 99999;
 }
 
 #menu {
@@ -33,7 +35,7 @@ div {
     box-shadow: 0px 0px 0px 0px #eeeeee;
     font-family: 'Open Sans', sans-serif;
     width: 95%;
-    height: auto;
+    min-height: 30px;
     //max-width: 350px;
 }
 button.local {
@@ -145,20 +147,24 @@ button.local {
 
 
 <div id='map'></div>
+
+
 <div id='menutop'>
+  <div id="note">
+    <span>テストVer</span>
+  </div>
+
 <div id='menu'>
-  <form name="selection">
-    <input type="checkbox" id="selectPp" name="selectPp" checked="checked" onChange="refleshPp();">空中写真
-    <input type="checkbox" id="selectPp2" name="selectPp2" onChange="refleshPp2();">テスト
-    <input type="checkbox" id="selectPp3" name="selectPp3" onChange="refleshPp3();">テスト２
-    <!--
-    <input type="checkbox" id="selectChizu" name="selectChizu" onChange="refleshZu();">地形図・地勢図
-    -->
-  </form>
+
+
+
+  <button type="button" class="local" onclick="showFilterSetting()" ><span id="showFilterSettingMode">▼詳細設定を閉じる</span></button>
+
+
   
   <div id='aco' name='aco'style="display:;">
   <form name="question" id="question">
-  <hr>
+  
     <datalist id="tickmarks">
       <option value="1900" label="1900"></option>
       <option value="1910"></option>
@@ -235,6 +241,8 @@ button.local {
     <input type="range" id="lower" name="lower" min="1920" max="2021" list="tickmarks" value="2021" onChange="refleshAll();"><span id="lwYearNum"></span><br>
     <input type="range" id="upper" name="upper" min="1920" max="2021" list="tickmarks" value="1930" onChange="refleshAll();"><span id="upYearNum"></span><br>
     
+    <hr>
+    
   </form>
   
   <!--
@@ -248,12 +256,19 @@ button.local {
   </form>
   -->
 
-  </div>
-  <button type="button" class="local" onclick="showFilterSetting()" ><span id="showFilterSettingMode">▲詳細設定を閉じる</span></button>
-</div>
-
-<div id="note">
-  <span>テストVer</span>
+  
+  
+  <form name="selection">
+    <input type="checkbox" id="selectPp" name="selectPp" checked="checked" onChange="refleshPp();">空中写真
+    <input type="checkbox" id="selectPp2" name="selectPp2" onChange="refleshPp2();">テスト
+    <input type="checkbox" id="selectPp3" name="selectPp3" onChange="refleshPp3();">テスト２
+    <!--
+    <input type="checkbox" id="selectChizu" name="selectChizu" onChange="refleshZu();">地形図・地勢図
+    -->
+  </form>
+  
+  </div><!-- aco -->
+  
 </div>
 
 </div>
@@ -295,12 +310,14 @@ var map = new mapboxgl.Map({
   zoom: 9, // starting zoom
   minZoom: 6,
   maxZoom: 17.99,
+  attributionControl: false,
   localIdeographFontFamily: ['MS Gothic', 'Hiragino Kaku Gothic Pro', 'sans-serif']
 });
 
 
-map.addControl(new mapboxgl.NavigationControl(), 'bottom-right');
+map.addControl(new mapboxgl.NavigationControl(), 'top-left');
 map.addControl(new mapboxgl.ScaleControl() );
+map.addControl(new mapboxgl.AttributionControl(), 'top-right');
 
 map.showTileBoundaries = false;
 
@@ -317,10 +334,10 @@ const showFilterSetting = () => {
   
   if(isShowFilterSetting ){ //閉じる作業
     element.style.display = "none";
-    document.getElementById("showFilterSettingMode").innerText = "▼詳細設定を開く";
+    document.getElementById("showFilterSettingMode").innerText = "▲詳細設定を開く";
   }else{ //開く作業
     element.style.display = "";
-    document.getElementById("showFilterSettingMode").innerText = "▲詳細設定を閉じる";
+    document.getElementById("showFilterSettingMode").innerText = "▼詳細設定を閉じる";
   }
   
   isShowFilterSetting = !isShowFilterSetting;
@@ -340,6 +357,9 @@ const openImageMapPage = (paramobj) => {
   //document.getElementById("imageMapPageIframe").src = "https://mapps.gsi.go.jp/map-lib-api/apiContentsView.do?specificationId=" + paramobj.specificationID;
   document.getElementById("imageMapPageIframe").src = "./imagePage.html?specificationId=" + paramobj.specificationID;
   document.getElementById("imageMapPage").style.display = "";
+  if(!pageStatus.isHighreso){
+    alert("高解像度なし")
+  }
 }
 
 const openHighresoImageMapPage = (paramobj) => {
@@ -362,6 +382,7 @@ const pageStatus = {
   "right": "highReso",
   "center": "lowReso",
   "specificationID": 0,
+  "isHighreso": true,
   "text": {
     "info": "情報",
     "highReso": "高解像度",
@@ -378,6 +399,7 @@ const statusInitialize = () =>{
   pageStatus.left = "info";
   pageStatus.center = "lowReso";
   pageStatus.right = "highReso";
+  pageStatus.isHighreso = true;
   document.getElementById("gotoLeftButtonSpan").innerText = "≪" + pageStatus.text[pageStatus.left];
   document.getElementById("gotoRightButtonSpan").innerText = pageStatus.text[pageStatus.right] + "≫";
   document.getElementById("centerTitleSpan").innerText = pageStatus.titletext[pageStatus.center];
