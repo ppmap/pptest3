@@ -311,6 +311,7 @@ var map = new mapboxgl.Map({
   minZoom: 6,
   maxZoom: 17.99,
   attributionControl: false,
+  clickTolerance: 10,
   localIdeographFontFamily: ['MS Gothic', 'Hiragino Kaku Gothic Pro', 'sans-serif']
 });
 
@@ -357,9 +358,6 @@ const openImageMapPage = (paramobj) => {
   //document.getElementById("imageMapPageIframe").src = "https://mapps.gsi.go.jp/map-lib-api/apiContentsView.do?specificationId=" + paramobj.specificationID;
   document.getElementById("imageMapPageIframe").src = "./imagePage.html?specificationId=" + paramobj.specificationID;
   document.getElementById("imageMapPage").style.display = "";
-  if(!pageStatus.isHighreso){
-    alert("高解像度なし")
-  }
 }
 
 const openHighresoImageMapPage = (paramobj) => {
@@ -395,6 +393,25 @@ const pageStatus = {
   }
 };
 
+const disableHighresoButton = () => {
+
+  if(pageStatus.isHighreso) return;
+  
+  if(pageStatus.left == "highReso"){
+    document.getElementById("gotoLeftButtonSpan").style.color = "#FFFFFF";
+    document.getElementById("gotoLeftButtonSpan").style["text-decoration"] = "line-through";
+    document.getElementById("gotoRightButtonSpan").style.color = "#000000";
+    document.getElementById("gotoRightButtonSpan").style["text-decoration"] = "none";
+  }else if(pageStatus.right == "highReso"){
+    document.getElementById("gotoRightButtonSpan").style.color = "#FFFFFF";
+    document.getElementById("gotoRightButtonSpan").style["text-decoration"] = "line-through";
+    document.getElementById("gotoLeftButtonSpan").style.color = "#000000";
+    document.getElementById("gotoLeftButtonSpan").style["text-decoration"] = "none";
+  }
+
+}
+
+
 const statusInitialize = () =>{
   pageStatus.left = "info";
   pageStatus.center = "lowReso";
@@ -403,6 +420,7 @@ const statusInitialize = () =>{
   document.getElementById("gotoLeftButtonSpan").innerText = "≪" + pageStatus.text[pageStatus.left];
   document.getElementById("gotoRightButtonSpan").innerText = pageStatus.text[pageStatus.right] + "≫";
   document.getElementById("centerTitleSpan").innerText = pageStatus.titletext[pageStatus.center];
+  
 }
 
 
@@ -414,6 +432,7 @@ const statusShiftRight = () =>{
   document.getElementById("gotoLeftButtonSpan").innerText = "≪" + pageStatus.text[pageStatus.left];
   document.getElementById("gotoRightButtonSpan").innerText = pageStatus.text[pageStatus.right] + "≫";
   document.getElementById("centerTitleSpan").innerText = pageStatus.titletext[pageStatus.center];
+  
 }
 
 const statusShiftLeft = () =>{
@@ -424,6 +443,7 @@ const statusShiftLeft = () =>{
   document.getElementById("gotoLeftButtonSpan").innerText = "≪" + pageStatus.text[pageStatus.left];
   document.getElementById("gotoRightButtonSpan").innerText = pageStatus.text[pageStatus.right] + "≫";
   document.getElementById("centerTitleSpan").innerText = pageStatus.titletext[pageStatus.center];
+  
 }
 
 
@@ -432,12 +452,16 @@ const goToLeft = () => {
   if(pageStatus.left == "info"){
     openImageMapInfoPage({"specificationID": pageStatus["specificationID"], "hash": pageStatus["hash"]});
   }else if(pageStatus.left == "highReso"){
+    if(!pageStatus.isHighreso){
+      return;
+    }
     openHighresoImageMapPage({"specificationID": pageStatus["specificationID"], "hash": pageStatus["hash"]});
   }else{
     openImageMapPage({"specificationID": pageStatus["specificationID"], "hash": pageStatus["hash"]});
   }
   
   statusShiftLeft();
+  disableHighresoButton();
 }
 
 const goToRight = () => {
@@ -445,12 +469,16 @@ const goToRight = () => {
   if(pageStatus.right == "info"){
     openImageMapInfoPage({"specificationID": pageStatus["specificationID"], "hash": pageStatus["hash"]});
   }else if(pageStatus.right == "highReso"){
+    if(!pageStatus.isHighreso){
+      return;
+    }
     openHighresoImageMapPage({"specificationID": pageStatus["specificationID"], "hash": pageStatus["hash"]});
   }else{
     openImageMapPage({"specificationID": pageStatus["specificationID"], "hash": pageStatus["hash"]});
   }
   
   statusShiftRight();
+  disableHighresoButton();
 }
 
 

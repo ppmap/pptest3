@@ -69,6 +69,10 @@ map.on('click', function(e) {
               //window.open(url, "mapps");
               pageStatus["specificationID"] = feature.properties[name];
               pageStatus["hash"] = "#" + map.getZoom() + "/" + feature.geometry.coordinates[1] + "/" + feature.geometry.coordinates[0];
+              if(!feature.source.match('photo-')){
+                pageStatus.isHighreso = false;
+              }
+              disableHighresoButton();
               openImageMapPage({
                 "specificationID": feature.properties[name], 
                 "hash": pageStatus["hash"]
