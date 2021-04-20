@@ -92,18 +92,18 @@ const showLayer = (tile, upYear, lwYear, filterArr) => {
     const layerSetting = {
       "photo": {
         "checkBoxContainer": "selectPp",
-        "souceMaxzoom": 11,
+        "sourceMaxzoom": 11,
         "circleColorRgb": [255,0,0]
       },
       "photo2": {
         "checkBoxContainer": "selectPp2",
-        "souceMaxzoom": 11,
-        "circleColorRgb": [255,0,0]
+        "sourceMaxzoom": 11,
+        "circleColorRgb": [0,255,0]
       },
       "photo3": {
         "checkBoxContainer": "selectPp3",
-        "souceMaxzoom": 11,
-        "circleColorRgb": [255,0,0]
+        "sourceMaxzoom": 11,
+        "circleColorRgb": [0,0,255]
       }
     
     }
@@ -113,12 +113,12 @@ const showLayer = (tile, upYear, lwYear, filterArr) => {
     //アイコンの色
     //ソースの最大ZL
     let circleColorRgb = [100,100,100];
-    let souceMaxzoom = 11;
+    let sourceMaxzoom = 11;
     
     if(layerSetting[tile]){
       if(!document.selection[layerSetting[tile].checkBoxContainer].checked) return;
       circleColorRgb = layerSetting[tile].circleColorRgb;
-      souceMaxzoom = layerSetting[tile].souceMaxzoom;
+      sourceMaxzoom = layerSetting[tile].sourceMaxzoom;
     
     }else{
       console.log("引数ミス");
@@ -152,7 +152,7 @@ const showLayer = (tile, upYear, lwYear, filterArr) => {
           //tiles: [root + '/pbf/' + tile + '/' + ys + 's/{z}/{x}/{y}.pbf'],
           tiles: [root + '/xyz/' + tile + '/{z}/{x}/{y}.pbf'],
           minzoom: 6,
-          maxzoom: souceMaxzoom
+          maxzoom: sourceMaxzoom
         });
       }
       
