@@ -9,7 +9,7 @@
         "type": "raster",
         "maxzoom": 18, 
         "minzoom": 2, 
-        "attribution": "<a href='https://maps.gsi.go.jp/development/ichiran.html#dem' target='_blank'>地理院タイル</a>"
+        "attribution": "<a href='https://maps.gsi.go.jp/development/ichiran.html' target='_blank'>地理院タイル</a>"
     }
 }, 
 "layers": [

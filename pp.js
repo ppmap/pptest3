@@ -17,6 +17,28 @@ const endYear = 2021;
 
 /*************************************************************************************/
 
+
+const layerSetting = {
+  "photo": {
+    "checkBoxContainer": "selectPp",
+    "sourceMaxzoom": 11,
+    "circleColorRgb": [255,0,0]
+    //,"enableHighreso": true
+  },
+      "photo2": {
+    "checkBoxContainer": "selectPp2",
+    "sourceMaxzoom": 11,
+    "circleColorRgb": [0,255,0]
+  },
+      "photo3": {
+    "checkBoxContainer": "selectPp3",
+    "sourceMaxzoom": 11,
+    "circleColorRgb": [0,0,255]
+  }
+    
+}
+
+
 const showLayer = (tile, upYear, lwYear, filterArr) => {
   const upYears = Math.ceil(upYear/10)*10;
   const lwYears = Math.floor(lwYear/10)*10;
@@ -52,6 +74,9 @@ const showLayer = (tile, upYear, lwYear, filterArr) => {
       if(map.getLayer(layerid + 'debug')){
         map.removeLayer(layerid + 'debug');
       }
+      if(map.getLayer(layerids + 'text')){
+        map.removeLayer(layerids + 'text');
+      }
       if(map.getLayer(layerid)){
         map.removeLayer(layerid);
         if(map.getSource(sourceid)){
@@ -77,6 +102,9 @@ const showLayer = (tile, upYear, lwYear, filterArr) => {
       if(map.getLayer(layerid)){
         map.removeLayer(layerid);
       }
+      if(map.getLayer(layerid + 'text')){
+        map.removeLayer(layerid + 'text');
+      }
       if(map.getLayer(layeridszl)){
         map.removeLayer(layeridszl);
       }
@@ -88,25 +116,6 @@ const showLayer = (tile, upYear, lwYear, filterArr) => {
     }
     
     
-    
-    const layerSetting = {
-      "photo": {
-        "checkBoxContainer": "selectPp",
-        "sourceMaxzoom": 11,
-        "circleColorRgb": [255,0,0]
-      },
-      "photo2": {
-        "checkBoxContainer": "selectPp2",
-        "sourceMaxzoom": 11,
-        "circleColorRgb": [0,255,0]
-      },
-      "photo3": {
-        "checkBoxContainer": "selectPp3",
-        "sourceMaxzoom": 11,
-        "circleColorRgb": [0,0,255]
-      }
-    
-    }
     
     
     //チェックボックスの確認
@@ -185,12 +194,47 @@ const showLayer = (tile, upYear, lwYear, filterArr) => {
           'visibility': 'visible'
         },
         'paint': {
-          'circle-radius': 5,
-          'circle-color': ['rgba', circleColorRgb[0], circleColorRgb[1], circleColorRgb[2], 1]
+          'circle-radius': [
+            "interpolate", ["linear"], ["zoom"],
+            11,4,
+            15,8
+          ],
+          'circle-color': ['rgba', circleColorRgb[0], circleColorRgb[1], circleColorRgb[2], 1],
+          'circle-stroke-color': ['rgba', 255,255,255,1],
+          'circle-stroke-width': 1
         },
         'source-layer': 'single'
       });
       
+      map.addLayer({
+        'id': sourceid + 'text',
+        'type': 'symbol',
+        'source': sourceid,
+        'minzoom': 13,
+        'maxzoom': 22,
+        'filter': filter,
+        'layout': {
+          'text-field': [
+            "case",
+            [">", ["to-number", ["slice", ["get", "date"], 0, 4]], 1900],
+            ["concat", "'", ["slice", ["get", "date"], 2, 4] ],
+            "?"
+          ],
+          'text-size': 12,
+          'text-variable-anchor': ["left", "top", "right", "bottom", "center"],
+          'text-font': ["NotoSansCJKjp-Regular"],
+          'text-allow-overlap': false,
+          'visibility': 'visible'
+        },
+        'paint': {
+          'text-color': ['rgba', circleColorRgb[0], circleColorRgb[1], circleColorRgb[2], 1],
+          'text-halo-color': ['rgba', 255,255,255,1],
+          'text-halo-width': 2
+        },
+        'source-layer': 'single'
+      });
+    
+    
       console.log('-', ys);
       
       
@@ -268,15 +312,26 @@ const showLayer = (tile, upYear, lwYear, filterArr) => {
 const refleshLayer = (tile) =>{
   
   //年で絞り込み
-  const l = +document.question.lower.value;
-  const u = +document.question.upper.value;
+  let l = +document.question.lower.value;
+  let u = +document.question.upper.value;
   
-  document.getElementById('lwYearNum').innerText = l + "年";
-  document.getElementById('upYearNum').innerText = u + "年";
+  if(l < 1945){
+    l = 0;
+    document.getElementById('lwYearNum').innerText = "戦前";
+    document.getElementById('upYearNum').innerText = u + "年";
+  }else if(u < 1945){
+    u = 0;
+    document.getElementById('lwYearNum').innerText = l + "年";
+    document.getElementById('upYearNum').innerText = "戦前";
+  }else{
+    document.getElementById('lwYearNum').innerText = l + "年";
+    document.getElementById('upYearNum').innerText = u + "年";
+  }
   
   const upy = Math.max(l,u);
   const lwy = Math.min(l,u);
-  console.log(upy, lwy);
+  console.log(upy, lwy); 
+  
   
   const filterArr = [
           ['>=', ["to-number", ["slice", ["get", "date"], 0, 4]], lwy],

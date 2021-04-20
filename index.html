@@ -238,8 +238,8 @@ button.local {
     <br>
     
     
-    <input type="range" id="lower" name="lower" min="1920" max="2021" list="tickmarks" value="2021" onChange="refleshAll();"><span id="lwYearNum"></span><br>
-    <input type="range" id="upper" name="upper" min="1920" max="2021" list="tickmarks" value="1930" onChange="refleshAll();"><span id="upYearNum"></span><br>
+    <input type="range" id="lower" name="lower" min="1944" max="2021" list="tickmarks" value="1945" onChange="refleshAll();"><span id="lwYearNum"></span><br>
+    <input type="range" id="upper" name="upper" min="1944" max="2021" list="tickmarks" value="2021" onChange="refleshAll();"><span id="upYearNum"></span><br>
     
     <hr>
     
@@ -318,7 +318,7 @@ var map = new mapboxgl.Map({
 
 map.addControl(new mapboxgl.NavigationControl(), 'top-left');
 map.addControl(new mapboxgl.ScaleControl() );
-map.addControl(new mapboxgl.AttributionControl(), 'top-right');
+map.addControl(new mapboxgl.AttributionControl({compact: true}), 'top-right');
 
 map.showTileBoundaries = false;
 
