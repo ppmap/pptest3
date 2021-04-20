@@ -395,7 +395,13 @@ const pageStatus = {
 
 const disableHighresoButton = () => {
 
-  if(pageStatus.isHighreso) return;
+  if(pageStatus.isHighreso){
+    document.getElementById("gotoRightButtonSpan").style.color = "#000000";
+    document.getElementById("gotoRightButtonSpan").style["text-decoration"] = "none";
+    document.getElementById("gotoLeftButtonSpan").style.color = "#000000";
+    document.getElementById("gotoLeftButtonSpan").style["text-decoration"] = "none";
+    return;
+  }
   
   if(pageStatus.left == "highReso"){
     document.getElementById("gotoLeftButtonSpan").style.color = "#FFFFFF";
