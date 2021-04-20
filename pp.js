@@ -88,9 +88,44 @@ const showLayer = (tile, upYear, lwYear, filterArr) => {
     }
     
     
+    
+    const layerSetting = {
+      "photo": {
+        "checkBoxContainer": "selectPp",
+        "souceMaxzoom": 11,
+        "circleColorRgb": [255,0,0]
+      },
+      "photo2": {
+        "checkBoxContainer": "selectPp2",
+        "souceMaxzoom": 11,
+        "circleColorRgb": [255,0,0]
+      },
+      "photo3": {
+        "checkBoxContainer": "selectPp3",
+        "souceMaxzoom": 11,
+        "circleColorRgb": [255,0,0]
+      }
+    
+    }
+    
+    
     //チェックボックスの確認
     //アイコンの色
-    let circleColorRgb = [255,255,255];
+    //ソースの最大ZL
+    let circleColorRgb = [100,100,100];
+    let souceMaxzoom = 11;
+    
+    if(layerSetting[tile]){
+      if(!document.selection[layerSetting[tile].checkBoxContainer].checked) return;
+      circleColorRgb = layerSetting[tile].circleColorRgb;
+      souceMaxzoom = layerSetting[tile].souceMaxzoom;
+    
+    }else{
+      console.log("引数ミス");
+      return;
+    }
+    
+    /*
     if(tile == "photo"){
       if(!document.selection.selectPp.checked) return;
       circleColorRgb = [255,0,0];
@@ -103,7 +138,7 @@ const showLayer = (tile, upYear, lwYear, filterArr) => {
     }else{
       circleColorRgb = [100,100,100];
     }
-    
+    */
     
     
     //if(+ys >= lwYears && upYears > +ys){
@@ -116,8 +151,8 @@ const showLayer = (tile, upYear, lwYear, filterArr) => {
           type: 'vector',
           //tiles: [root + '/pbf/' + tile + '/' + ys + 's/{z}/{x}/{y}.pbf'],
           tiles: [root + '/xyz/' + tile + '/{z}/{x}/{y}.pbf'],
-          minzoom: 11,
-          maxzoom: 11
+          minzoom: 6,
+          maxzoom: souceMaxzoom
         });
       }
       
@@ -167,7 +202,7 @@ const showLayer = (tile, upYear, lwYear, filterArr) => {
     //小縮尺用にクラスタリングしたタイル
     
     
-      
+    /*
     if(!map.getSource(sourceidszl)){
       map.addSource(sourceidszl, {
         type: 'vector',
@@ -176,11 +211,12 @@ const showLayer = (tile, upYear, lwYear, filterArr) => {
         maxzoom: 10
       });
     }
+    */
     
     map.addLayer({
       'id': sourceidszl,
       'type': 'circle',
-      'source': sourceidszl,
+      'source': sourceid, //sourceidszl,
       'minzoom': 6,
       'maxzoom': 11,
       'filter': filter,
@@ -196,7 +232,7 @@ const showLayer = (tile, upYear, lwYear, filterArr) => {
     map.addLayer({
       'id': sourceidszl + 'text',
       'type': 'symbol',
-      'source': sourceidszl,
+      'source': sourceid, //sourceidszl,
       'minzoom': 6,
       'maxzoom': 11,
       'filter': filter,
