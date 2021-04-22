@@ -488,6 +488,31 @@ const goToRight = () => {
 }
 
 
+map.on('dblclick', () => {
+  const features = map.queryRenderedFeatures({
+    "filter": [
+      "all",
+      ["!has", "point_count"],
+      ["has", "date"]
+    ]
+  });
+  
+  console.log(features);
+  if(features.length > 200){
+    console.log("200件を超えています。")
+    return;
+  }
+  
+  features.sort((a, b) => {
+    const aYear = +a.properties.date.substr(0,4);
+    const bYear = +b.properties.date.substr(0,4);
+    const res = aYear - bYear;
+    console.log(aYear, bYear, res);
+    return res;
+  });
+  console.log(features);
+});
+
 </script>
 
 <script src='./pp.js'></script>
