@@ -4,7 +4,6 @@
 <meta charset='utf-8' />
 <title>pp</title>
 <meta name='viewport' content='initial-scale=1,maximum-scale=1,user-scalable=no' />
-
 <style>
 body { margin:0; padding:0; }
 #map {
@@ -24,7 +23,7 @@ body { margin:0; padding:0; }
 
 #menu {
     position: relative;
-    padding: auto;
+    padding: 0.5% 2.5% ;
     margin: 0 0;
     box-shadow: 0px 0px 0px 0px #eeeeee;
     font-family: 'Open Sans', sans-serif;
@@ -49,14 +48,18 @@ body { margin:0; padding:0; }
     <table>
       <tr>
         <td>
-        <img src='https://gsi-cyberjapan.github.io/gsimaps/image/system/loading002.gif'>
-        <br>
-        ロード中...<br>少々お待ちください。</td>
+        <span id="loadingMessage">
+          <img src='https://gsi-cyberjapan.github.io/gsimaps/image/system/loading002.gif'>
+          <br>
+          ロード中...<br>少々お待ちください。
+        </span>
+        </td>
       </tr>
     </table>
   </div>
 </div>
 <div id='map'></div>
+
 
 <script src='https://api.tiles.mapbox.com/mapbox-gl-js/v1.13.1/mapbox-gl.js'></script>
 <link href='https://api.tiles.mapbox.com/mapbox-gl-js/v1.13.1/mapbox-gl.css' rel='stylesheet' />
@@ -99,19 +102,22 @@ if(window.location.search){
   });
 }
 
+
 const imageMapStyle = {
 	"version": 8,
 	"name": "imageMapStyle",
 	"sources": {
-		"image": {
-			"type": "image",
-			"url": "./image/1.png?spedificationId=" + specificationID,
-			"coordinates": [
-				[-8, 8],
-				[8, 8],
-				[8, -8],
-				[-8, -8]
-			]
+		"center": {
+			"type": "geojson",
+			"data": {
+				"type": "Feature",
+				"properties": {},
+				"geometry": {
+					"type": "Point",
+					"coordinates": [0,0]
+				}
+				
+			}
 		}
 	},
 	"layers": [
@@ -125,11 +131,6 @@ const imageMapStyle = {
 			"layout": {
 				"visibility": "visible"
 			}
-		},
-		{
-			"id": "image",
-			"type": "raster",
-			"source": "image"
 		}
 	]
 }
@@ -138,10 +139,10 @@ var map = new mapboxgl.Map({
   container: 'map', // container id
   style: imageMapStyle, // stylesheet location
   center: [0,0], // starting position [lng, lat]
-//  maxBounds: [-8, -8, 8, 8], //要調整
-  zoom: 3, // starting zoom
+//  maxBounds: [-10, -10, 10, 10],
+  zoom: 0, // starting zoom
   minZoom: 0,
-  maxZoom: 10,
+  maxZoom: 15,
   localIdeographFontFamily: ['MS Gothic', 'Hiragino Kaku Gothic Pro', 'sans-serif']
 });
 
@@ -150,10 +151,47 @@ map.addControl(new mapboxgl.NavigationControl(), 'top-left');
 
 map.showTileBoundaries = false;
 
-
 map.on('load', () => {
-  document.getElementById("menutop").style.display = "none";
+
+  const imageUrl = "./image/1.png?spedificationId=" + specificationID;
+  
+  map.loadImage( imageUrl, (error, image) => {
+  
+      if (error){
+        document.getElementById("loadingMessage").innerText = "画像が取得できませんでした";
+        console.log(error); 
+        throw error;
+      }
+      
+      console.log(image);
+      const w = image.width/100;
+      const h = image.height/100;
+      
+      map.addSource("image", {
+			"type": "image",
+			"url": imageUrl,
+			"coordinates": [
+				[-w, h],
+				[w, h],
+				[w, -h],
+				[-w, -h]
+			]
+      });
+       
+      map.addLayer({
+			"id": "image",
+			"type": "raster",
+			"source": "image"
+      });
+      
+      document.getElementById("menutop").style.display = "none";
+      
+    }
+  );
+  
 });
+
+
 
 </script>
 
